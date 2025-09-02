@@ -1,0 +1,279 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Trova Auto – Ricorda dove parcheggi</title>
+<meta name="description" content="Trova Auto: ricorda dove parcheggi e ritrovala in pochi secondi. Demo interattiva, funzioni, screenshot e prezzi.">
+<link rel="icon" href="assets/icon.png">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0f172a;--card:#fff;--muted:#64748b;--ink:#0b1220;--primary:#1f2f6b;--primary-ink:#fff;--accent:#2563eb;--danger:#ef4444;--chip:#e2e8f0;--radius:14px}
+*{box-sizing:border-box}html,body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:var(--ink);background:#f6f7fb}
+a{color:var(--accent);text-decoration:none}.container{max-width:1100px;margin:0 auto;padding:20px}
+
+/* header */
+.header{position:sticky;top:0;z-index:50;background:rgba(15,23,42,.98);backdrop-filter:saturate(140%) blur(6px);color:#fff;border-bottom:1px solid #0b1220}
+.header .wrap{display:flex;align-items:center;gap:14px;padding:12px 0}
+.brand{display:flex;align-items:center;gap:10px}
+.brand img{width:28px;height:28px;border-radius:8px}
+.brand b{font-size:18px}
+.nav{display:flex;gap:14px;margin-left:18px}
+.nav a{color:#cbd5e1}.nav a:hover{color:#fff}
+.controls{margin-left:auto;display:flex;align-items:center;gap:10px}
+.select{border-radius:999px;border:1px solid #334155;background:#0b1220;color:#cbd5e1;padding:8px 12px}
+.switch{display:flex;align-items:center;gap:8px;font-size:13px}
+
+/* hero */
+.hero{display:grid;grid-template-columns:1.1fr 1fr;gap:28px;align-items:start;margin:18px 0}
+.hero h1{font-size:40px;line-height:1.05;margin:.2rem 0 1rem}
+.badges{display:flex;flex-wrap:wrap;gap:10px;margin:14px 0 20px}
+.badge{background:var(--chip);border-radius:999px;padding:7px 12px;font-size:14px}
+.actions{display:flex;gap:10px;flex-wrap:wrap}
+.btn{border:0;border-radius:999px;padding:12px 16px;font-weight:600;cursor:pointer}
+.btn-primary{background:var(--primary);color:var(--primary-ink)}
+.btn-ghost{background:#e8ecff;color:#1f2f6b}
+.card{background:var(--card);border-radius:var(--radius);box-shadow:0 10px 30px rgba(2,8,23,.08);padding:18px}
+.phone{border-radius:12px;overflow:hidden;border:1px solid #e2e8f0;background:#fff}
+.phone img{display:block;width:100%}
+
+/* demo blocco (il tuo simulatore) */
+.demo{margin-top:28px;display:grid;grid-template-columns:1fr 360px;gap:22px}
+.mapwrap{background:#fff;border-radius:var(--radius);box-shadow:0 10px 30px rgba(2,8,23,.08);padding:14px}
+.toolbar{display:flex;gap:8px;align-items:center;justify-content:space-between;margin:6px 0 12px}
+.group{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.select-white{border-radius:999px;border:1px solid #e2e8f0;padding:9px 12px;background:#fff}
+.canvas{border-radius:12px;border:1px solid #e2e8f0;width:100%;height:420px;display:block;background:#f5f7ff}
+.legend{font-size:12px;color:var(--muted);margin-top:6px}
+.side{display:flex;flex-direction:column;gap:12px}
+.panel{background:#fff;border-radius:var(--radius);box-shadow:0 10px 30px rgba(2,8,23,.08);padding:14px}
+.panel h3{margin:0 0 10px}
+.list{display:flex;flex-direction:column;gap:12px;max-height:420px;overflow:auto}
+.item{border:1px solid #e2e8f0;border-radius:12px;padding:12px}
+.item h4{margin:0 0 6px;font-size:16px}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
+.chip{background:#f1f5f9;border-radius:999px;padding:4px 8px;font-size:12px}
+.row{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.btn-sm{padding:8px 10px;border-radius:10px;font-weight:600;border:1px solid #e2e8f0;background:#fff;cursor:pointer}
+.btn-sm.primary{background:var(--primary);color:#fff;border-color:var(--primary)}
+.btn-sm.danger{background:#fde2e2;color:#b91c1c;border-color:#fecaca}
+.btn-sm.ghost{background:#eef2ff;color:#1f2f6b;border-color:#dbeafe}
+.meta{font-size:12px;color:var(--muted)}
+
+/* sezioni */
+.section{padding:50px 0}
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.fcard{background:#fff;border:1px solid #e2e8f0;border-radius:14px;padding:16px}
+.gallery{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.gallery img{width:100%;display:block;border-radius:12px;border:1px solid #e2e8f0}
+.pricing{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+.pcard{background:#fff;border:1px solid #e2e8f0;border-radius:16px;padding:18px}
+.pcard h3{margin:0}
+.pcard ul{margin:10px 0 0;padding-left:18px}
+
+/* footer */
+.footer{color:var(--muted);text-align:center;padding:30px 0 50px}
+
+@media (max-width:980px){
+  .hero{grid-template-columns:1fr}
+  .demo{grid-template-columns:1fr}
+  .gallery{grid-template-columns:1fr 1fr}
+  .cards{grid-template-columns:1fr}
+  .pricing{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header">
+  <div class="container wrap">
+    <div class="brand"><img src="assets/icon.png" alt="Trova Auto"><b>Trova Auto</b></div>
+    <nav class="nav">
+      <a href="#demo">Demo</a>
+      <a href="#features">Funzioni</a>
+      <a href="#shots">Screenshot</a>
+      <a href="#pricing">Prezzi</a>
+      <a href="#faq">FAQ</a>
+    </nav>
+    <div class="controls">
+      <select id="langSelect" class="select" aria-label="Lingua">
+        <option value="it">Italiano</option><option value="en">English</option><option value="de">Deutsch</option>
+      </select>
+      <label class="switch"><input type="checkbox" id="proToggle"><span id="lblSimulaPro">Simula Pro</span></label>
+    </div>
+  </div>
+</header>
+
+<main class="container">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div>
+      <h1 id="t_title">Trova Auto: ricorda dove parcheggi e ritrovala in pochi secondi</h1>
+      <p id="t_sub">Ideale per parcheggi affollati, viaggi o eventi. Ti guida passo dopo passo fino al punto esatto.</p>
+      <div class="badges">
+        <span class="badge">💾 <span id="t_badgeSave">Salvataggi rapidi</span></span>
+        <span class="badge">🧭 <span id="t_badgeRoute">Percorsi guidati</span></span>
+        <span class="badge">🌐 <span id="t_badgeLang">Multilingua</span></span>
+        <span class="badge">🔗 <span id="t_badgeShare">Condivisione</span></span>
+      </div>
+      <div class="actions">
+        <a class="btn btn-primary" href="#demo">Prova la Demo</a>
+        <a class="btn btn-ghost" href="#pricing">Scarica quando sarà disponibile</a>
+      </div>
+    </div>
+    <div class="card phone">
+      <!-- immagine promo (telefono + schermata) -->
+      <img src="assets/promo.jpg" alt="Trova Auto in uso">
+    </div>
+  </section>
+
+  <!-- DEMO (TUO SIMULATORE) -->
+  <section class="demo" id="demo" aria-label="Demo interattiva">
+    <div class="mapwrap">
+      <div class="toolbar">
+        <div class="group">
+          <button id="btnSaveHere" class="btn btn-primary">Salva qui</button>
+          <button id="btnAddRandom" class="btn">Aggiungi posizione casuale</button>
+          <button id="btnClear" class="btn">Svuota</button>
+        </div>
+        <div class="group">
+          <select id="modeSelect" class="select-white" aria-label="Modalità percorso">
+            <option value="walk">A piedi</option><option value="drive">In auto</option>
+          </select>
+        </div>
+      </div>
+      <canvas id="map" class="canvas" width="1000" height="600" aria-label="Mappa demo"></canvas>
+      <div class="legend" id="legend">Clic sulla mappa per piazzare il segnaposto • coordinate simulate</div>
+    </div>
+    <div class="side">
+      <div class="panel">
+        <h3 id="t_saved">Salvataggi</h3>
+        <div class="meta" id="t_limit">Limite versione base: 3 posizioni</div>
+        <div class="list" id="list"></div>
+      </div>
+      <div class="panel">
+        <h3>Dettagli selezionati</h3>
+        <div id="currentMeta" class="meta">Nessuna posizione selezionata</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FUNZIONI -->
+  <section id="features" class="section">
+    <h2 style="margin:0 0 14px">Funzionalità principali</h2>
+    <div class="cards">
+      <div class="fcard"><b>Salvataggi rapidi</b><p>Memorizza fino a 3 posizioni nella versione Base (illimitati in Pro).</p></div>
+      <div class="fcard"><b>Percorsi guidati</b><p>Visualizza la posizione dell’auto e il percorso stimato a piedi o in auto.</p></div>
+      <div class="fcard"><b>Multilingua</b><p>Italiano, inglese e tedesco fin da subito.</p></div>
+      <div class="fcard"><b>Interfaccia chiara</b><p>Pulsanti grandi e design pulito per l’uso immediato.</p></div>
+      <div class="fcard"><b>Condivisione</b><p>Invia la posizione salvata via social o app di messaggistica.</p></div>
+      <div class="fcard"><b>Privacy</b><p>Dati solo sul dispositivo. Nessun login richiesto.</p></div>
+    </div>
+  </section>
+
+  <!-- GALLERIA / SCREENSHOT -->
+  <section id="shots" class="section">
+    <h2 style="margin:0 0 14px">Screenshot</h2>
+    <div class="gallery" aria-label="Galleria di screenshot">
+      <img src="assets/screen1.jpg" alt="Schermata home Trova Auto">
+      <img src="assets/screen2.jpg" alt="Lista posizioni salvate">
+      <img src="assets/screen3.jpg" alt="Dettagli salvataggio">
+      <img src="assets/screen4.jpg" alt="Schermata condivisione">
+      <img src="assets/screen5.jpg" alt="Impostazioni lingua">
+      <img src="assets/icon.png" alt="Icona dell’app">
+    </div>
+    <p class="meta" style="margin-top:8px">Suggerimento: mantieni le immagini 1080×1920 per la massima resa su mobile.</p>
+  </section>
+
+  <!-- PREZZI -->
+  <section id="pricing" class="section">
+    <h2 style="margin:0 0 14px">Versioni</h2>
+    <div class="pricing">
+      <div class="pcard">
+        <h3>Base <small style="color:var(--muted)">Gratis</small></h3>
+        <ul>
+          <li>Fino a 3 salvataggi</li>
+          <li>Banner pubblicitari</li>
+          <li>Condivisione posizione</li>
+        </ul>
+      </div>
+      <div class="pcard">
+        <h3>Pro (in arrivo) <small style="color:var(--muted)">TBD</small></h3>
+        <ul>
+          <li>Salvataggi illimitati</li>
+          <li>Nessuna pubblicità</li>
+          <li>Funzioni avanzate dedicate</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section id="faq" class="section">
+    <h2 style="margin:0 0 14px">FAQ</h2>
+    <details class="fcard"><summary><b>Funziona nei parcheggi sotterranei?</b></summary><p>Sì. Puoi salvare manualmente la posizione anche senza GPS.</p></details>
+    <details class="fcard"><summary><b>Serve un account?</b></summary><p>No, tutto è salvato localmente sul dispositivo.</p></details>
+    <details class="fcard"><summary><b>Come condivido la posizione?</b></summary><p>Usa il pulsante “Condividi” che apre il foglio di condivisione del telefono.</p></details>
+  </section>
+
+  <section class="footer">© Trova Auto — Demo statica. Nessuna posizione reale.</section>
+</main>
+
+<script>
+/* ====== I18N ====== */
+const STR = {
+  it:{title:"Trova Auto: ricorda dove parcheggi e ritrovala in pochi secondi",sub:"Ideale per parcheggi affollati, viaggi o eventi. Ti guida passo dopo passo fino al punto esatto.",badgeSave:"Memorizza fino a 3 posizioni nella versione Base.",badgeRoute:"Vedi la posizione dell’auto e segui il percorso.",badgeLang:"Italiano, inglese e tedesco.",badgeShare:"Invia la posizione salvata via social o app di messaggistica.",saved:"Salvataggi",limit:"Limite versione base: 3 posizioni",simPro:"Simula Pro",none:"Nessuna posizione selezionata"},
+  en:{title:"Find your parked car in seconds",sub:"Perfect for crowded car parks, trips or events. Step-by-step guidance to the exact spot.",badgeSave:"Save up to 3 spots in the Base version.",badgeRoute:"See your car position and follow the route.",badgeLang:"Italian, English and German.",badgeShare:"Share saved position via social or messaging apps.",saved:"Saved places",limit:"Base limit: 3 positions",simPro:"Simulate Pro",none:"No position selected"},
+  de:{title:"Finde dein geparktes Auto in Sekunden",sub:"Ideal für volle Parkplätze, Reisen oder Events. Schritt-für-Schritt bis zum Ziel.",badgeSave:"Speichere bis zu 3 Positionen in der Basisversion.",badgeRoute:"Sieh die Auto-Position und folge der Route.",badgeLang:"Italienisch, Englisch und Deutsch.",badgeShare:"Teile die gespeicherte Position über Social oder Messenger.",saved:"Speicherungen",limit:"Basislimit: 3 Positionen",simPro:"Pro simulieren",none:"Keine Position ausgewählt"}
+};
+const $=s=>document.querySelector(s);
+
+/* ====== Stato condiviso (demo + UI) ====== */
+const state={lang:localStorage.getItem('demo_lang')||'it',isPro:localStorage.getItem('demo_isPro')==='1',points:JSON.parse(localStorage.getItem('demo_points')||'[]'),current:null,mode:localStorage.getItem('demo_mode')||'walk'};
+const MAX_BASE=3;
+
+/* ====== Lingua ====== */
+function applyLang(){
+  const L=STR[state.lang]||STR.it;
+  $('#t_title').textContent=L.title; $('#t_sub').textContent=L.sub;
+  $('#t_badgeSave').textContent=L.badgeSave; $('#t_badgeRoute').textContent=L.badgeRoute;
+  $('#t_badgeLang').textContent=L.badgeLang; $('#t_badgeShare').textContent=L.badgeShare;
+  $('#t_saved').textContent=L.saved; $('#t_limit').textContent=state.isPro ? 'Pro attivo: salvataggi illimitati' : L.limit;
+  $('#lblSimulaPro').textContent=L.simPro; $('#currentMeta').textContent=L.none;
+  localStorage.setItem('demo_lang', state.lang);
+}
+$('#langSelect').value=state.lang;
+$('#langSelect').addEventListener('change',e=>{state.lang=e.target.value;applyLang();renderList();});
+
+/* ====== Mappa simulata (il TUO codice, compattato) ====== */
+const canvas=$('#map'),ctx=canvas.getContext('2d'),PAD=24;let marker={x:canvas.width/2,y:canvas.height/2};
+function drawPin(x,y,color='#e11d48'){ctx.save();ctx.fillStyle=color;ctx.beginPath();ctx.arc(x,y,8,0,Math.PI*2);ctx.fill();ctx.strokeStyle='#fff';ctx.lineWidth=2;ctx.stroke();ctx.restore();}
+function drawGrid(){ctx.clearRect(0,0,canvas.width,canvas.height);ctx.fillStyle='#f5f7ff';ctx.fillRect(0,0,canvas.width,canvas.height);ctx.strokeStyle='#e2e8f0';for(let x=PAD;x<canvas.width;x+=40){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,canvas.height);ctx.stroke();}for(let y=PAD;y<canvas.height;y+=40){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(canvas.width,y);ctx.stroke();}ctx.strokeStyle='#cbd5e1';ctx.strokeRect(1,1,canvas.width-2,canvas.height-2);drawPin(marker.x,marker.y,'#1f2f6b');for(const p of state.points) drawPin(p.x,p.y,'#e11d48');}
+function mapToLatLng(x,y){const lat=(y/canvas.height)*0.02+45.40,lng=(x/canvas.width)*0.03+9.10;return{lat:+lat.toFixed(6),lng:+lng.toFixed(6)};}
+canvas.addEventListener('click',e=>{const r=canvas.getBoundingClientRect();marker.x=e.clientX-r.left;marker.y=e.clientY-r.top;drawGrid();updateCurrentMeta();});
+function addRandom(){marker.x=PAD+Math.random()*(canvas.width-PAD*2);marker.y=PAD+Math.random()*(canvas.height-PAD*2);drawGrid();updateCurrentMeta();}
+
+/* ====== Salvataggi ====== */
+function persist(){localStorage.setItem('demo_points',JSON.stringify(state.points));}
+function detailsText(p){const dx=Math.abs(p.x-marker.x),dy=Math.abs(p.y-marker.y);const d=Math.sqrt(dx*dx+dy*dy);const meters=d*1.5;const km=meters/1000;const mode=state.mode==='drive'?'In auto':'A piedi';const speed=state.mode==='drive'?35:4.5;const minutes=Math.max(1,Math.round((km/speed)*60));return `${mode} • ${meters<1000?meters.toFixed(0)+' m':km.toFixed(2)+' km'} • ~ ${minutes} min`; }
+function renderList(){const el=$('#list');el.innerHTML='';if(state.points.length===0){el.innerHTML=`<div class="meta">Nessun salvataggio al momento</div>`;updateCurrentMeta();drawGrid();return;}for(const p of state.points){const it=document.createElement('div');it.className='item';const time=new Date(p.ts).toLocaleString();it.innerHTML=`<h4>Lat ${p.lat} • Lng ${p.lng}</h4><div class="chips"><span class="chip">${time}</span><span class="chip">${detailsText(p)}</span></div><div class="row"><button class="btn-sm primary">Dettagli</button><button class="btn-sm ghost">Condividi</button><button class="btn-sm">Copia coordinate</button><button class="btn-sm danger">Elimina</button></div>`;const [bDet,bShare,bCopy,bDel]=it.querySelectorAll('button');bDet.addEventListener('click',()=>{state.current=p.id;marker.x=p.x;marker.y=p.y;updateCurrentMeta();drawGrid();window.scrollTo({top:document.getElementById('demo').offsetTop-10,behavior:'smooth'});});bShare.addEventListener('click',()=>{const txt=`Posizione salvata: ${p.lat}, ${p.lng}`; if(navigator.share){navigator.share({title:'Trova Auto',text:txt}).catch(()=>navigator.clipboard.writeText(txt));}else{navigator.clipboard.writeText(txt).then(()=>alert('Condivisione non supportata. Testo copiato.'));}});bCopy.addEventListener('click',()=>navigator.clipboard.writeText(`${p.lat}, ${p.lng}`).then(()=>alert('Coordinate copiate negli appunti')));bDel.addEventListener('click',()=>{state.points=state.points.filter(x=>x.id!==p.id);if(state.current===p.id)state.current=null;persist();renderList();});el.appendChild(it);}updateCurrentMeta();drawGrid();}
+function updateCurrentMeta(){const L=STR[state.lang]||STR.it;if(!state.current){$('#currentMeta').textContent=L.none;return;}const p=state.points.find(x=>x.id===state.current);$('#currentMeta').textContent=p?`Selezionato → ${p.lat}, ${p.lng} (${detailsText(p)})`:L.none;}
+function saveHere(){const {lat,lng}=mapToLatLng(marker.x,marker.y);if(!state.isPro && state.points.length>=3){alert('Limite versione base: 3 salvataggi. Attiva "Simula Pro" per illimitati.');return;}const id=Date.now();state.points.unshift({id,x:marker.x,y:marker.y,lat,lng,ts:Date.now(),mode:state.mode});persist();renderList();}
+
+/* ====== Eventi UI ====== */
+document.getElementById('btnSaveHere').addEventListener('click',saveHere);
+document.getElementById('btnAddRandom').addEventListener('click',addRandom);
+document.getElementById('btnClear').addEventListener('click',()=>{if(confirm('Svuotare tutti i salvataggi?')){state.points=[];state.current=null;persist();renderList();}});
+document.getElementById('proToggle').checked=state.isPro;
+document.getElementById('proToggle').addEventListener('change',e=>{state.isPro=e.target.checked;localStorage.setItem('demo_isPro',state.isPro?'1':'0');applyLang();});
+document.getElementById('modeSelect').value=state.mode;
+document.getElementById('modeSelect').addEventListener('change',e=>{state.mode=e.target.value;localStorage.setItem('demo_mode',state.mode);renderList();});
+
+/* ====== bootstrap ====== */
+applyLang(); renderList(); addRandom();
+</script>
+</body>
+</html>
